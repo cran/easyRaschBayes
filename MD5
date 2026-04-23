@@ -1,12 +1,12 @@
-5ceaad53c92337956c2eb84d138f35fb *DESCRIPTION
+b241d797b01c30dc5c4f0e938858b755 *DESCRIPTION
 183019908c615171c9d08c2ce41ff73c *NAMESPACE
-8721b7ba171417930b13e4a31124ec1b *NEWS.md
+befc8485312664a56706bc3e3b13c92d *NEWS.md
 4de49fc52126edb2f8ad2a52c4c2b579 *R/brms_dif.R
 f2e3a81795b337dce5173053ccd9ccd0 *R/brms_fitstats.R
 9798bf378bb9cbdfd05f48471910f4aa *R/brms_globalfit.R
 73b41a7ee6626127315020b3e1949a3f *R/brms_localdep.R
 6bedd8d6a3a1a90cd4b71fc6f9b096e2 *R/brms_plots.R
-156f0714f87529c2c34d555a7990dc38 *R/cicc_plot.R
+11f392c8f0c64cb60725c565cf0546a8 *R/cicc_plot.R
 2fd4299edf97f909df7c2330443b6a1c *R/data_plots.R
 f298ae6541e63d936f06539fc7e28d5d *R/easyRaschBayes-package.R
 33f64b942acea99d8945af2f5ab7097d *R/gk_gamma_helpers.R
