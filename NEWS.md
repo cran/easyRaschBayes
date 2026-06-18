@@ -1,4 +1,24 @@
-# easyRaschBayes 0.2.0.1 (dev)
+# easyRaschBayes 0.3.0 (development)
+
+- New custom brms family `hurdle_acat` for hurdle partial credit models (H-PCM).
+  This is written by [Kristoffer Magnusson](https://rpsychologist.com/)
+- Several adapted (experimental) functions for H-PCM, all using the `*_hpcm` suffix.
+  - `infit_statistic_hpcm()`
+  - `q3_statistic_hpcm()`
+  - `item_parameters_hpcm()`
+  - `person_parameters_hpcm()`
+  - `RMUreliability_hpcm()`
+  - `plot_icc_hpcm()`
+  - `plot_targeting_hpcm()`
+- Bug fix - changed post processing functions to use `median_hdci()` 
+  instead of `median_hdi()` to avoid issues with multimodal posteriors.
+- Bug fix - corrected the WLE person estimates in `person_parameters()` and 
+  `person_parameters_hpcm()`. The polytomous Warm bias correction had the wrong 
+  sign, biasing estimates outward; WLE now matches `catR`/`TAM`. Extreme (minimum 
+  and maximum) scores now receive proper finite WLE estimates instead of being 
+  clamped to the `theta_range` bounds.
+
+# easyRaschBayes 0.2.0.1
 
 - Fix for `plot_icc()` theta values.
 
