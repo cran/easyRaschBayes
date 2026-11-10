@@ -86,11 +86,15 @@ logit link, the density is:
 where \eqn{\eta} is the linear predictor (i.e., theta for a Rasch
 model with no additional fixed effects) and \eqn{\tau_k} are the
 item thresholds. Analogous formulas are used for the
-\code{cumulative}, \code{sratio}, and \code{cratio} families.
+\code{cumulative}, \code{sratio}, and \code{cratio} families, with
+the model's link function (for example logit, probit or cloglog).
+The \code{acat} family is supported with the logit link only, and
+models that estimate a discrimination parameter (\code{disc}) stop
+with an error. For rating scale models (common thresholds with item
+effects) each item's thresholds are shifted by its item effect.
 
 Posterior uncertainty in the thresholds propagates into credible
-interval ribbons around the category probability curves — a
-Bayesian advantage over point-estimate-based plots.
+interval ribbons around the category probability curves.
 }
 \examples{
 \donttest{
@@ -102,7 +106,7 @@ library(ggplot2)
 
 # --- Partial Credit Model ---
 
-df_pcm <- eRm::pcmdat2 \%>\%
+df_pcm <- phq9[1:200, 1:9] \%>\%
   mutate(across(everything(), ~ .x + 1)) \%>\%
   rownames_to_column("id") \%>\%
   pivot_longer(!id, names_to = "item", values_to = "response")
@@ -121,7 +125,7 @@ plot_ipf(fit_pcm, item_var = item, person_var = id)
 
 # Plot a subset of items
 plot_ipf(fit_pcm, item_var = item, person_var = id,
-         items = c("I1", "I2", "I3"))
+         items = c("q1", "q2", "q3"))
 
 # Customise appearance
 plot_ipf(fit_pcm, item_var = item, person_var = id,

@@ -9,16 +9,15 @@ RMUreliability(input_draws, verbose = FALSE, level = 0.95)
 \arguments{
 \item{input_draws}{A matrix or data frame of posterior draws. Rows represent subjects and columns represent draws.}
 
-\item{verbose}{Logical. Print detailed information about the input data. Default is TRUE.}
+\item{verbose}{Logical. Print the number of subjects and draws. Default is FALSE.}
 
 \item{level}{Numeric. Credibility level for the highest density continuous interval. Default is 0.95.}
 }
 \value{
-A list containing:
-\itemize{
-\item hdci: A data frame with a point-estimate (posterior mean) and highest density continuous interval for reliability, calculated using the ggdist::mean_hdci function
-\item reliability_posterior_draws: A numeric vector of posterior draws for reliability, of length K/2 (K = number of columns/draws in your input_draws matrix)
-}
+A data frame from \code{ggdist::mean_hdci()} with one row and
+the columns \code{rmu_estimate} (mean of the reliability draws),
+\code{hdci_lowerbound}, \code{hdci_upperbound}, \code{.width},
+\code{.point} and \code{.interval}.
 }
 \description{
 This function measures reliability using posterior draws from a fitted Bayesian model.
@@ -34,6 +33,14 @@ using brms, see
 
 For an example of how to apply this function to go/go-no task data using brms, see
 \href{https://www.bignardi.co.uk/8_bayes_reliability/tutorial_calculating_rmu_gonogo.html}{this tutorial}.
+
+The draws (columns) are shuffled and split into two halves. Each
+column of the first half is correlated with the matching column of the
+second half across subjects, which gives \code{floor(K / 2)}
+reliability draws for \code{K} posterior draws. Their mean and highest
+density continuous interval are returned. The split is random, so call
+\code{set.seed()} first for reproducible results. Missing values in
+\code{input_draws} give a warning and an \code{NA} result.
 }
 \examples{
 \donttest{
@@ -44,8 +51,9 @@ library(tibble)
 
 # --- Dichotomous Rasch Model ---
 
-df_rm <- eRm::raschdat3 \%>\%
-  as.data.frame() \%>\%
+# PHQ-9 items dichotomised (any symptom vs none), for illustration only
+df_rm <- phq9[1:200, 1:9] \%>\%
+  mutate(across(everything(), ~ as.integer(.x > 0))) \%>\%
   rownames_to_column("id") \%>\%
   pivot_longer(!id, names_to = "item", values_to = "response")
 
@@ -73,5 +81,5 @@ RMUreliability(posterior_draws)
 
 }
 \references{
-Bignardi, G., Kievit, R., & Bürkner, P. C. (2025). A general method for estimating reliability using Bayesian Measurement Uncertainty. PsyArXiv. \href{https://osf.io/preprints/psyarxiv/h54k8}{doi:10.31234/osf.io/h54k8}
+Bignardi, G., Kievit, R., & Bürkner, P. C. (2026). A general method for estimating reliability using Bayesian Measurement Uncertainty. PsyArXiv. \url{https://osf.io/preprints/psyarxiv/h54k8}
 }

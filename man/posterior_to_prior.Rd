@@ -44,7 +44,7 @@ the model the priors will be used with. One of \code{"logit"},
 and no transformation is applied. When different from the source
 model's link, all location and scale parameters are rescaled
 using the approximation \eqn{\beta_{\text{probit}} \approx
-  \beta_{\text{logit}} / 1.7}. This is useful when transferring
+\beta_{\text{logit}} / 1.7}. This is useful when transferring
 priors from a logit-fitted model to a probit model or vice versa.}
 }
 \value{
@@ -90,6 +90,15 @@ In all cases the person-level SD receives a
 \code{normal(mean, sd * mult)} prior (brms applies the lower
 bound of zero automatically for SD parameters).
 
+\strong{Independent priors.} Each prior is built from one
+parameter's marginal posterior, so the posterior correlations
+between parameters are not carried over. Thresholds are usually
+positively correlated through the shared location of the scale, so
+the independent priors are more informative about overall location
+than the posterior was. For example, the SD of the mean threshold
+can be noticeably smaller under the priors than under the posterior.
+Use \code{mult > 1} to widen them if this matters.
+
 \strong{Link function transformation:} When \code{target_link}
 differs from the source model's link function, all parameters
 (means and SDs) are rescaled by a factor of approximately 1.7.
@@ -109,7 +118,7 @@ library(tibble)
 
 # --- Partial Credit Model ---
 
-df_pcm <- eRm::pcmdat2 \%>\%
+df_pcm <- phq9[1:200, 1:9] \%>\%
   mutate(across(everything(), ~ .x + 1)) \%>\%
   rownames_to_column("id") \%>\%
   pivot_longer(!id, names_to = "item", values_to = "response")
@@ -133,8 +142,9 @@ probit_priors <- posterior_to_prior(fit_pcm, target_link = "probit")
 
 # --- Dichotomous 1PL (fixed item effects) ---
 
-df_rm <- eRm::raschdat3 \%>\%
-  as.data.frame() \%>\%
+# PHQ-9 items dichotomised (any symptom vs none), for illustration only
+df_rm <- phq9[1:200, 1:9] \%>\%
+  mutate(across(everything(), ~ as.integer(.x > 0))) \%>\%
   rownames_to_column("id") \%>\%
   pivot_longer(!id, names_to = "item", values_to = "response")
 

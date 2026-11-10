@@ -64,8 +64,9 @@ and \code{location} columns are present.}
 \code{locations} with: \code{se} (posterior SD),
 \code{hdci_lower} and \code{hdci_upper} (highest density
 continuous interval bounds at the level specified by
-\code{prob}), and \code{n_eff} (effective sample size for the
-parameter).}
+\code{prob}), and \code{n_eff} (bulk effective sample size from
+\code{posterior::ess_bulk()}, which accounts for disagreement
+between chains).}
 \item{item_information}{A \code{\link[tibble]{tibble}} with one
 row per item containing: \code{item}, \code{location} (mean
 item location, i.e. mean of thresholds for polytomous items),
@@ -145,7 +146,7 @@ library(tibble)
 
 # --- Partial Credit Model ---
 
-df_pcm <- eRm::pcmdat2 \%>\%
+df_pcm <- phq9[1:200, 1:9] \%>\%
   mutate(across(everything(), ~ .x + 1)) \%>\%
   rownames_to_column("id") \%>\%
   pivot_longer(!id, names_to = "item", values_to = "response")
@@ -183,8 +184,9 @@ dim(ip_draws$draws_matrix)
 
 # --- Dichotomous Rasch ---
 
-df_rm <- eRm::raschdat3 \%>\%
-  as.data.frame() \%>\%
+# PHQ-9 items dichotomised (any symptom vs none), for illustration only
+df_rm <- phq9[1:200, 1:9] \%>\%
+  mutate(across(everything(), ~ as.integer(.x > 0))) \%>\%
   rownames_to_column("id") \%>\%
   pivot_longer(!id, names_to = "item", values_to = "response")
 
